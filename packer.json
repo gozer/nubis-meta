@@ -19,6 +19,16 @@
           "SecretAccessKey"
         ]
       }
+    },
+    "ConsulZoneID": {
+      "Value": {
+        "Ref": "ConsulZone"
+      }
+    },
+    "CIZoneID": {
+      "Value": {
+        "Ref": "CIZone"
+      }
     }
   },
   "Resources": {
@@ -27,6 +37,24 @@
       "Properties": {
         "AccessControl": "PublicRead",
         "BucketName": "nubisproject-amis"
+      }
+    },
+    "ConsulZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for Consul Discovery"
+        },
+        "Name": "consul.sandbox.nubis.allizom.org"
+      }
+    },
+    "CIZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for Consul CI Project"
+        },
+        "Name": "ci.sandbox.nubis.allizom.org"
       }
     },
     "packerbucketpolicy": {
