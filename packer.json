@@ -22,6 +22,14 @@
     }
   },
   "Resources": {
+    "S3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicRead",
+        "BucketName": "nubisproject-amis"
+      },
+      "DeletionPolicy": "Retain"
+    },
     "packer": {
       "Type": "AWS::IAM::User",
       "Properties": {
