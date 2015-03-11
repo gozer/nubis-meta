@@ -42,9 +42,24 @@
                 "s3:*"
               ],
               "Effect": "Allow",
-              "Resource": { "Ref" : "PackerS3Bucket" },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "PackerS3Bucket"
+                    },
+                    "/*"
+                  ]
+                ]
+              },
               "Principal": {
-                "AWS": { "Ref": "packer"
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "packer",
+                    "Arn"
+                  ]
                 }
               }
             }
