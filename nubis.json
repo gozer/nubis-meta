@@ -39,6 +39,13 @@
         "BucketName": "nubisproject-amis"
       }
     },
+    "CIS3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "PublicRead",
+        "BucketName": "nubisproject-ci"
+      }
+    },
     "ConsulZone": {
       "Type": "AWS::Route53::HostedZone",
       "Properties": {
@@ -95,6 +102,47 @@
         },
         "Bucket": {
           "Ref": "PackerS3Bucket"
+        }
+      }
+    },
+    "cibucketpolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "PolicyDocument": {
+          "Id": "CIAIMBucketPolicy",
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "AllAccess",
+              "Action": [
+                "s3:*"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "CIS3Bucket"
+                    },
+                    "/*"
+                  ]
+                ]
+              },
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "packer",
+                    "Arn"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        "Bucket": {
+          "Ref": "CIS3Bucket"
         }
       }
     },
