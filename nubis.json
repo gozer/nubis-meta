@@ -32,7 +32,7 @@
     },
     "BaseZoneID": {
       "Value": {
-        "Ref": "CIZone"
+        "Ref": "BaseZone"
       }
     }
   },
