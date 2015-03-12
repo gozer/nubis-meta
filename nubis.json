@@ -29,6 +29,11 @@
       "Value": {
         "Ref": "CIZone"
       }
+    },
+    "BaseZoneID": {
+      "Value": {
+        "Ref": "CIZone"
+      }
     }
   },
   "Resources": {
@@ -62,6 +67,15 @@
           "Comment": "Zone for Consul CI Project"
         },
         "Name": "ci.sandbox.nubis.allizom.org"
+      }
+    },
+    "BaseZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for Base CI Project"
+        },
+        "Name": "base.sandbox.nubis.allizom.org"
       }
     },
     "packerbucketpolicy": {
