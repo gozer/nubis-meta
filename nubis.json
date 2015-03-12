@@ -105,47 +105,6 @@
         }
       }
     },
-    "cibucketpolicy": {
-      "Type": "AWS::S3::BucketPolicy",
-      "Properties": {
-        "PolicyDocument": {
-          "Id": "CIAIMBucketPolicy",
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Sid": "AllAccess",
-              "Action": [
-                "s3:*"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:aws:s3:::",
-                    {
-                      "Ref": "CIS3Bucket"
-                    },
-                    "/*"
-                  ]
-                ]
-              },
-              "Principal": {
-                "AWS": {
-                  "Fn::GetAtt": [
-                    "packer",
-                    "Arn"
-                  ]
-                }
-              }
-            }
-          ]
-        },
-        "Bucket": {
-          "Ref": "CIS3Bucket"
-        }
-      }
-    },
     "packer": {
       "Type": "AWS::IAM::User",
       "Properties": {
@@ -231,6 +190,40 @@
                 "ec2:ModifyImageAttribute"
               ],
               "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "PackerRole"
+          }
+        ]
+      }
+    },
+    "CIRolePolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "nubis-ci",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*"
+              ],
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "CIS3Bucket"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
             }
           ]
         },
