@@ -184,6 +184,7 @@
                 "iam:PassRole",
                 "ec2:AttachVolume",
                 "ec2:CreateVolume",
+                "ec2:CopyImage",
                 "ec2:DeleteVolume",
                 "ec2:CreateKeypair",
                 "ec2:DeleteKeypair",
