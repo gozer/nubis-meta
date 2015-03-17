@@ -34,6 +34,11 @@
       "Value": {
         "Ref": "BaseZone"
       }
+    },
+    "MediaWikiZoneID": {
+      "Value": {
+        "Ref": "MediaWikiZone"
+      }
     }
   },
   "Resources": {
@@ -76,6 +81,15 @@
           "Comment": "Zone for Base CI Project"
         },
         "Name": "base.sandbox.nubis.allizom.org"
+      }
+    },
+    "MediaWikiZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for MediaWiki CI Project"
+        },
+        "Name": "mediawiki.sandbox.nubis.allizom.org"
       }
     },
     "packerbucketpolicy": {
