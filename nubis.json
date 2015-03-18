@@ -231,6 +231,65 @@
         ]
       }
     },
+    "DeploymentRolePolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "deployment",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "autoscaling:CreateAutoScalingGroup",
+                "autoscaling:CreateLaunchConfiguration",
+		"autoscaling:DeleteLaunchConfiguration",
+		"autoscaling:DescribeAutoScalingGroup",
+		"autoscaling:DescribeAutoScalingGroups",
+		"autoscaling:DescribeLaunchConfigurations",
+		"autoscaling:UpdateAutoScalingGroup",
+		"autoscaling:DescribeScalingActivities",
+		"autoscaling:DeleteAutoScalingGroup",
+		"cloudformation:*",
+		"ec2:CreateSecurityGroups",
+		"ec2:DescribeAvailabilityZones",
+		"ec2:DescribeSecurityGroups",
+		"ec2:DescribeAccountAttributes",
+		"elasticache:CreateCacheSubnetGroup",
+		"elasticache:DeleteCacheSubnetGroup",
+		"elasticache:DescribeCacheSubnetGroups",
+		"elasticache:CreateCacheCluster",
+		"elasticache:DescribeCacheClusters",
+		"elasticache:DeleteCacheCluster",
+		"elasticloadbalancing:ConfigureHealthCheck",
+		"elasticloadbalancing:CreateLoadBalancer",
+		"elasticloadbalancing:DeleteLoadBalancer",
+		"elasticloadbalancing:DescribeLoadBalancers",
+		"elasticloadbalancing:ModifyLoadBalancerAttributes",
+		"elasticloadbalancing:SetLoadBalancerPoliciesOfListener",
+		"rds:CreateDBInstance",
+		"rds:CreateDBSubnetGroup",
+		"rds:DeleteDBSubnetGroup",
+		"rds:DescribeDBSubnetGroups",
+		"rds:DeleteDBInstance",
+		"rds:DescribeDBInstances",
+		"route53:CreateHostedZone",
+		"route53:GetChange",
+		"route53:DeleteHostedZone",
+		"route53:ListHostedZones"
+
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "PackerRole"
+          }
+        ]
+      }
+    },
     "CIRolePolicies": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
