@@ -195,6 +195,8 @@
               "Effect": "Allow",
               "Action": [
                 "sts:DecodeAuthorizationMessage",
+                "sts:AssumeRole",
+                "iam:ListRoles",
                 "iam:PassRole",
                 "ec2:AttachVolume",
                 "ec2:CreateVolume",
