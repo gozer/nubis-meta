@@ -56,6 +56,13 @@
         "BucketName": "nubisproject-ci"
       }
     },
+    "FluentdS3Bucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "AccessControl": "Private",
+        "BucketName": "nubisproject-fluentd"
+      }
+    },
     "ConsulZone": {
       "Type": "AWS::Route53::HostedZone",
       "Properties": {
@@ -184,6 +191,28 @@
         "Path": "/"
       }
     },
+    "FluentdRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "ec2.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path": "/"
+      }
+    },
     "RolePolicies": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
@@ -194,41 +223,26 @@
             {
               "Effect": "Allow",
               "Action": [
-                "sts:DecodeAuthorizationMessage",
-                "sts:AssumeRole",
-                "iam:ListRoles",
-                "iam:PassRole",
-                "ec2:AttachVolume",
-                "ec2:CreateVolume",
-                "ec2:CopyImage",
-                "ec2:DeleteVolume",
-                "ec2:CreateKeypair",
-                "ec2:DeleteKeypair",
-                "ec2:CreateSecurityGroup",
-                "ec2:DeleteSecurityGroup",
-                "ec2:AuthorizeSecurityGroupIngress",
-                "ec2:CreateImage",
-                "ec2:RunInstances",
-                "ec2:TerminateInstances",
-                "ec2:StopInstances",
-                "ec2:DescribeVolumes",
-                "ec2:DetachVolume",
-                "ec2:DescribeInstances",
-                "ec2:CreateSnapshot",
-                "ec2:DeleteSnapshot",
-                "ec2:DescribeSnapshots",
-                "ec2:DescribeImages",
-                "ec2:RegisterImage",
-                "ec2:CreateTags",
-                "ec2:ModifyImageAttribute"
+                "s3:*"
               ],
-              "Resource": "*"
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:aws:s3:::",
+                    {
+                      "Ref": "FluentdS3Bucket"
+                    },
+                    "/*"
+                  ]
+                ]
+              }
             }
           ]
         },
         "Roles": [
           {
-            "Ref": "PackerRole"
+            "Ref": "FluentdRole"
           }
         ]
       }
@@ -245,44 +259,43 @@
               "Action": [
                 "autoscaling:CreateAutoScalingGroup",
                 "autoscaling:CreateLaunchConfiguration",
-		"autoscaling:DeleteLaunchConfiguration",
-		"autoscaling:DescribeAutoScalingGroup",
-		"autoscaling:DescribeAutoScalingGroups",
-		"autoscaling:DescribeLaunchConfigurations",
-		"autoscaling:UpdateAutoScalingGroup",
-		"autoscaling:DescribeScalingActivities",
-		"autoscaling:DeleteAutoScalingGroup",
-		"autoscaling:DescribeScheduledActions",
-		"autoscaling:TerminateInstanceInAutoScalingGroup",
-		"autoscaling:SetDesiredCapacity",
-		"cloudformation:*",
-		"ec2:CreateSecurityGroups",
-		"ec2:DescribeAvailabilityZones",
-		"ec2:DescribeSecurityGroups",
-		"ec2:DescribeAccountAttributes",
-		"elasticache:CreateCacheSubnetGroup",
-		"elasticache:DeleteCacheSubnetGroup",
-		"elasticache:DescribeCacheSubnetGroups",
-		"elasticache:CreateCacheCluster",
-		"elasticache:DescribeCacheClusters",
-		"elasticache:DeleteCacheCluster",
-		"elasticloadbalancing:ConfigureHealthCheck",
-		"elasticloadbalancing:CreateLoadBalancer",
-		"elasticloadbalancing:DeleteLoadBalancer",
-		"elasticloadbalancing:DescribeLoadBalancers",
-		"elasticloadbalancing:ModifyLoadBalancerAttributes",
-		"elasticloadbalancing:SetLoadBalancerPoliciesOfListener",
-		"rds:CreateDBInstance",
-		"rds:CreateDBSubnetGroup",
-		"rds:DeleteDBSubnetGroup",
-		"rds:DescribeDBSubnetGroups",
-		"rds:DeleteDBInstance",
-		"rds:DescribeDBInstances",
-		"route53:CreateHostedZone",
-		"route53:GetChange",
-		"route53:DeleteHostedZone",
-		"route53:ListHostedZones"
-
+                "autoscaling:DeleteLaunchConfiguration",
+                "autoscaling:DescribeAutoScalingGroup",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:UpdateAutoScalingGroup",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:DeleteAutoScalingGroup",
+                "autoscaling:DescribeScheduledActions",
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "autoscaling:SetDesiredCapacity",
+                "cloudformation:*",
+                "ec2:CreateSecurityGroups",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeAccountAttributes",
+                "elasticache:CreateCacheSubnetGroup",
+                "elasticache:DeleteCacheSubnetGroup",
+                "elasticache:DescribeCacheSubnetGroups",
+                "elasticache:CreateCacheCluster",
+                "elasticache:DescribeCacheClusters",
+                "elasticache:DeleteCacheCluster",
+                "elasticloadbalancing:ConfigureHealthCheck",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:ModifyLoadBalancerAttributes",
+                "elasticloadbalancing:SetLoadBalancerPoliciesOfListener",
+                "rds:CreateDBInstance",
+                "rds:CreateDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "rds:DescribeDBSubnetGroups",
+                "rds:DeleteDBInstance",
+                "rds:DescribeDBInstances",
+                "route53:CreateHostedZone",
+                "route53:GetChange",
+                "route53:DeleteHostedZone",
+                "route53:ListHostedZones"
               ],
               "Resource": "*"
             }
@@ -336,6 +349,17 @@
         "Roles": [
           {
             "Ref": "PackerRole"
+          }
+        ]
+      }
+    },
+    "FluentdInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "FluentdRole"
           }
         ]
       }
