@@ -286,6 +286,7 @@
                 "ec2:createTags",
                 "ec2:CreateSecurityGroup",
                 "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInstances",
                 "ec2:DescribeSecurityGroups",
                 "ec2:DescribeAccountAttributes",
                 "ec2:AuthorizeSecurityGroupIngress",
