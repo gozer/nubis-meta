@@ -2,13 +2,16 @@
 - hosts: localhost
   connection: local
   gather_facts: False
+  vars:
+    region: "us-west-2"
   tasks:
   - name: Manage Nubis Meta CloudFormation Stack
     cloudformation:
       stack_name: "packer"
+      region: "{{ region }}"
       state: "present"
       disable_rollback: true
       template: "nubis.json"
     register: stack 
-  - debug: var=stack.stack_outputs
   - debug: var=stack.output
+  - debug: var=stack.stack_outputs
