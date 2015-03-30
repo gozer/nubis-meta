@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: False
+  tasks:
+  - name: Manage Nubis Meta CloudFormation Stack
+    cloudformation:
+      stack_name: "packer"
+      state: "present"
+      disable_rollback: true
+      template: "nubis.json"
+    register: stack 
+  - debug: var=stack.stack_outputs
+  - debug: var=stack.output
