@@ -39,6 +39,11 @@
       "Value": {
         "Ref": "MediaWikiZone"
       }
+    },
+    "NubisMySQL56ParameterGroup": {
+      "Value": {
+        "Ref": "NubisMySQL56ParameterGroup"
+      }
     }
   },
   "Resources": {
@@ -436,6 +441,51 @@
         "Roles": [
           {
             "Ref": "FluentdRole"
+          }
+        ]
+      }
+    },
+    "NubisMySQL56ParameterGroup": {
+      "Type": "AWS::RDS::DBParameterGroup",
+      "Properties" : {
+        "Description" : "Nubis DB Parameter group for MySql 5.6",
+        "Family" : "MySQL5.6",
+        "Parameters" : {
+          "binlog_cache_size" : "32768",
+          "binlog_format" : "MIXED",
+          "explicit_defaults_for_timestamp" : "1",
+          "innodb_buffer_pool_size" : "{DBInstanceClassMemory*3/4}",
+          "innodb_file_per_table" : "1",
+          "innodb_flush_method" : "O_DIRECT",
+          "innodb_log_buffer_size" : "8388608",
+          "innodb_log_file_size" : "134217728",
+          "key_buffer_size" : "16777216",
+          "local_infile": "1",
+          "log_output" : "TABLE",
+          "master-info-repository" : "TABLE",
+          "max_allowed_packet" : "25165824",
+          "max_connections" : "{DBInstanceClassMemory/12582880}",
+          "performance_schema" : "0",
+          "read_buffer_size" : "262144",
+          "read_only" : "{TrueIfReplica}",
+          "read_rnd_buffer_size" : "524288",
+          "relay_log_info_repository" : "TABLE",
+          "sync_binlog" : "1",
+          "table_open_cache_instances" : "16",
+          "thread_stack" : "262144"
+        },
+        "Tags" : [
+          {
+            "Key": "ServiceName",
+            "Value": "Nubisproject"
+          },
+          {
+            "Key": "TechnicalOwner",
+            "Value": "infra-aws@mozilla.com"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "Parameter Group for MySQL 5.6 Resources"
           }
         ]
       }
