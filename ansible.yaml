@@ -4,7 +4,6 @@
   gather_facts: False
   vars:
     region: "us-west-2"
-    consul_regions: [ "us-east-1", "us-west-2" ]
   tasks:
   - name: Manage Nubis Meta CloudFormation Stack
     cloudformation:
@@ -15,15 +14,3 @@
       template: "nubis.json"
     register: stack 
   - debug: var=stack.stack_outputs
-  - name: Register Stack Outputs with Consul (us-east-1)
-    uri: url=http://ui.us-east-1.consul.sandbox.nubis.allizom.org/v1/kv/environments/sandbox/global/{{ item.key }}
-       method=PUT
-       body="{{ item.value }}"
-    with_dict: stack.stack_outputs
-    when: stack.changed
-  - name: Register Stack Outputs with Consul (us-west-2)
-    uri: url=http://ui.us-west-2.consul.sandbox.nubis.allizom.org/v1/kv/environments/sandbox/global/{{ item.key }}
-       method=PUT
-       body="{{ item.value }}"
-    with_dict: stack.stack_outputs
-    when: stack.changed
