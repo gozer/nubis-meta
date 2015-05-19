@@ -4,6 +4,8 @@
   gather_facts: False
   vars:
     region: "us-west-2"
+    env: "admin"
+    domain: "allizom.org"
   tasks:
   - name: Manage Nubis Meta CloudFormation Stack
     cloudformation:
@@ -12,5 +14,8 @@
       state: "present"
       disable_rollback: true
       template: "nubis.json"
+      template_parameters:
+        Environment: "{{ env }}"
+        Domain: "{{ domain }}"
     register: stack 
   - debug: var=stack.stack_outputs

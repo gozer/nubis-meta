@@ -6,5 +6,5 @@ $> aws cloudformation update-stack --capabilities CAPABILITY_IAM --stack-name nu
 
 Or better yet, use Ansible instead:
 
-$> ansible-playbook -i localhost, ansible.yaml
+$> ansible-playbook -i localhost, ansible.yaml -e environment=sandbox -e domain=allizom.org
 

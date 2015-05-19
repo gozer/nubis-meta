@@ -1,5 +1,17 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "Environment": {
+      "Description": "Name of the environemnt",
+      "Type": "String",
+      "Default": "sandbox"
+    },
+    "Domain": {
+      "Description": "Top-level containing domain",
+      "Type": "String",
+      "Default": "allizom.org"
+    }
+  },
   "Outputs": {
     "InstanceProfileName": {
       "Description": "The Name of the instance profile",
@@ -51,21 +63,21 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubisproject-amis"
+        "BucketName": "nubis-amis"
       }
     },
     "CIS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubisproject-ci"
+        "BucketName": "nubis-ci"
       }
     },
     "FluentdS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "nubisproject-fluentd"
+        "BucketName": "nubis-fluentd"
       }
     },
     "ConsulZone": {
@@ -74,7 +86,21 @@
         "HostedZoneConfig": {
           "Comment": "Zone for Consul Discovery"
         },
-        "Name": "consul.sandbox.nubis.allizom.org"
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "consul",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
       }
     },
     "CIZone": {
@@ -83,7 +109,21 @@
         "HostedZoneConfig": {
           "Comment": "Zone for Consul CI Project"
         },
-        "Name": "ci.sandbox.nubis.allizom.org"
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "ci",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
       }
     },
     "BaseZone": {
@@ -92,7 +132,21 @@
         "HostedZoneConfig": {
           "Comment": "Zone for Base CI Project"
         },
-        "Name": "base.sandbox.nubis.allizom.org"
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "base",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
       }
     },
     "MediaWikiZone": {
@@ -101,7 +155,21 @@
         "HostedZoneConfig": {
           "Comment": "Zone for MediaWiki CI Project"
         },
-        "Name": "mediawiki.sandbox.nubis.allizom.org"
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "mediawiki",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
       }
     },
     "packerbucketpolicy": {
@@ -447,35 +515,35 @@
     },
     "NubisMySQL56ParameterGroup": {
       "Type": "AWS::RDS::DBParameterGroup",
-      "Properties" : {
-        "Description" : "Nubis DB Parameter group for MySql 5.6",
-        "Family" : "MySQL5.6",
-        "Parameters" : {
-          "binlog_cache_size" : "32768",
-          "binlog_format" : "MIXED",
-          "character_set_server" : "utf8",
-          "explicit_defaults_for_timestamp" : "1",
-          "innodb_buffer_pool_size" : "{DBInstanceClassMemory*3/4}",
-          "innodb_file_per_table" : "1",
-          "innodb_flush_method" : "O_DIRECT",
-          "innodb_log_buffer_size" : "8388608",
-          "innodb_log_file_size" : "134217728",
-          "key_buffer_size" : "16777216",
+      "Properties": {
+        "Description": "Nubis DB Parameter group for MySql 5.6",
+        "Family": "MySQL5.6",
+        "Parameters": {
+          "binlog_cache_size": "32768",
+          "binlog_format": "MIXED",
+          "character_set_server": "utf8",
+          "explicit_defaults_for_timestamp": "1",
+          "innodb_buffer_pool_size": "{DBInstanceClassMemory*3/4}",
+          "innodb_file_per_table": "1",
+          "innodb_flush_method": "O_DIRECT",
+          "innodb_log_buffer_size": "8388608",
+          "innodb_log_file_size": "134217728",
+          "key_buffer_size": "16777216",
           "local_infile": "1",
-          "log_output" : "TABLE",
-          "master-info-repository" : "TABLE",
-          "max_allowed_packet" : "25165824",
-          "max_connections" : "{DBInstanceClassMemory/12582880}",
-          "performance_schema" : "0",
-          "read_buffer_size" : "262144",
-          "read_only" : "{TrueIfReplica}",
-          "read_rnd_buffer_size" : "524288",
-          "relay_log_info_repository" : "TABLE",
-          "sync_binlog" : "1",
-          "table_open_cache_instances" : "16",
-          "thread_stack" : "262144"
+          "log_output": "TABLE",
+          "master-info-repository": "TABLE",
+          "max_allowed_packet": "25165824",
+          "max_connections": "{DBInstanceClassMemory/12582880}",
+          "performance_schema": "0",
+          "read_buffer_size": "262144",
+          "read_only": "{TrueIfReplica}",
+          "read_rnd_buffer_size": "524288",
+          "relay_log_info_repository": "TABLE",
+          "sync_binlog": "1",
+          "table_open_cache_instances": "16",
+          "thread_stack": "262144"
         },
-        "Tags" : [
+        "Tags": [
           {
             "Key": "ServiceName",
             "Value": "Nubisproject"
