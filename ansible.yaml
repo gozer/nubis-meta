@@ -4,7 +4,7 @@
   gather_facts: False
   vars:
     region: "us-west-2"
-    env: "admin"
+    env: "sandbox"
     domain: "allizom.org"
   tasks:
   - name: Manage Nubis Meta CloudFormation Stack
