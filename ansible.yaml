@@ -2,10 +2,6 @@
 - hosts: localhost
   connection: local
   gather_facts: False
-  vars:
-    region: "us-west-2"
-    env: "sandbox"
-    domain: "allizom.org"
   tasks:
   - name: Manage Nubis Meta CloudFormation Stack
     cloudformation:
@@ -13,7 +9,7 @@
       region: "{{ region }}"
       state: "present"
       disable_rollback: true
-      template: "nubis.json"
+      template: "{{ template }}.json"
       template_parameters:
         Environment: "{{ env }}"
         Domain: "{{ domain }}"

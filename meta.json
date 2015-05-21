@@ -32,6 +32,11 @@
         ]
       }
     },
+    "WikiZoneID": {
+      "Value": {
+        "Ref": "WikiZone"
+      }
+    },
     "ConsulZoneID": {
       "Value": {
         "Ref": "ConsulZone"
@@ -63,21 +68,21 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubis-amis"
+        "BucketName": "nubis-dev-amis"
       }
     },
     "CIS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubis-ci"
+        "BucketName": "nubis-dev-ci"
       }
     },
     "FluentdS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "nubis-fluentd"
+        "BucketName": "nubis-dev-fluentd"
       }
     },
     "ConsulZone": {
@@ -91,6 +96,29 @@
             ".",
             [
               "consul",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "WikiZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for wiki.mozilla.org"
+        },
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "wiki",
               {
                 "Ref": "Environment"
               },
