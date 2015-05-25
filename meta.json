@@ -57,6 +57,11 @@
         "Ref": "MediaWikiZone"
       }
     },
+    "DpasteZoneID": {
+      "Value": {
+        "Ref": "DpasteZone"
+      }
+    },
     "NubisMySQL56ParameterGroup": {
       "Value": {
         "Ref": "NubisMySQL56ParameterGroup"
@@ -188,6 +193,29 @@
             ".",
             [
               "mediawiki",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "DpasteZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for DPaste CI Project"
+        },
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "dpaste",
               {
                 "Ref": "Environment"
               },
