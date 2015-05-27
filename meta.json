@@ -62,6 +62,11 @@
         "Ref": "DpasteZone"
       }
     },
+    "FluentCollectorZoneID": {
+      "Value": {
+        "Ref": "FluentCollectorZone"
+      }
+    },
     "NubisMySQL56ParameterGroup": {
       "Value": {
         "Ref": "NubisMySQL56ParameterGroup"
@@ -73,21 +78,21 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubis-dev-amis"
+        "BucketName": "nubis-amis"
       }
     },
     "CIS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubis-dev-ci"
+        "BucketName": "nubis-ci"
       }
     },
     "FluentdS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "nubis-dev-fluentd"
+        "BucketName": "nubis-fluentd"
       }
     },
     "ConsulZone": {
@@ -216,6 +221,29 @@
             ".",
             [
               "dpaste",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "FluentCollectorZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for Fluent Collector Project"
+        },
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "fluent-collector",
               {
                 "Ref": "Environment"
               },
