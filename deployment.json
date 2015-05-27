@@ -1,0 +1,248 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Parameters": {
+    "Environment": {
+      "Description": "Name of the environemnt",
+      "Type": "String",
+      "Default": "sandbox"
+    },
+    "Domain": {
+      "Description": "Top-level containing domain",
+      "Type": "String",
+      "Default": "allizom.org"
+    }
+  },
+  "Outputs": {
+    "ConsulZoneID": {
+      "Value": {
+        "Ref": "ConsulZone"
+      }
+    },
+    "NubisMySQL56ParameterGroup": {
+      "Value": {
+        "Ref": "NubisMySQL56ParameterGroup"
+      }
+    },
+    "InstanceProfileName": {
+      "Description": "The Name of the instance profile",
+      "Value": {
+        "Ref": "PackerInstanceProfile"
+      }
+    }
+  },
+  "Resources": {
+    "ConsulZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for Consul Discovery"
+        },
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "consul",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
+      }
+    },
+    "NubisMySQL56ParameterGroup": {
+      "Type": "AWS::RDS::DBParameterGroup",
+      "Properties": {
+        "Description": "Nubis DB Parameter group for MySql 5.6",
+        "Family": "MySQL5.6",
+        "Parameters": {
+          "binlog_cache_size": "32768",
+          "binlog_format": "MIXED",
+          "character_set_server": "utf8",
+          "explicit_defaults_for_timestamp": "1",
+          "innodb_buffer_pool_size": "{DBInstanceClassMemory*3/4}",
+          "innodb_file_per_table": "1",
+          "innodb_flush_method": "O_DIRECT",
+          "innodb_log_buffer_size": "8388608",
+          "innodb_log_file_size": "134217728",
+          "key_buffer_size": "16777216",
+          "local_infile": "1",
+          "log_output": "TABLE",
+          "master-info-repository": "TABLE",
+          "max_allowed_packet": "25165824",
+          "max_connections": "{DBInstanceClassMemory/12582880}",
+          "performance_schema": "0",
+          "read_buffer_size": "262144",
+          "read_only": "{TrueIfReplica}",
+          "read_rnd_buffer_size": "524288",
+          "relay_log_info_repository": "TABLE",
+          "sync_binlog": "1",
+          "table_open_cache_instances": "16",
+          "thread_stack": "262144"
+        },
+        "Tags": [
+          {
+            "Key": "ServiceName",
+            "Value": "Nubisproject"
+          },
+          {
+            "Key": "TechnicalOwner",
+            "Value": "infra-aws@mozilla.com"
+          },
+          {
+            "Key": "Purpose",
+            "Value": "Parameter Group for MySQL 5.6 Resources"
+          }
+        ]
+      }
+    },
+    "PackerRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "ec2.amazonaws.com"
+                ]
+              },
+              "Action": [
+                "sts:AssumeRole"
+              ]
+            }
+          ]
+        },
+        "Path": "/"
+      }
+    },
+    "PackerInstanceProfile": {
+      "Type": "AWS::IAM::InstanceProfile",
+      "Properties": {
+        "Path": "/",
+        "Roles": [
+          {
+            "Ref": "PackerRole"
+          }
+        ]
+      }
+    },
+    "PackerRolePolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "packer",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "iam:PassRole",
+                "ec2:CopyImage",
+                "ec2:AttachVolume",
+                "ec2:CreateVolume",
+                "ec2:DeleteVolume",
+                "ec2:CreateKeypair",
+                "ec2:DeleteKeypair",
+                "ec2:CreateSecurityGroup",
+                "ec2:DeleteSecurityGroup",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:CreateImage",
+                "ec2:RunInstances",
+                "ec2:TerminateInstances",
+                "ec2:StopInstances",
+                "ec2:DescribeVolumes",
+                "ec2:DetachVolume",
+                "ec2:DescribeInstances",
+                "ec2:CreateSnapshot",
+                "ec2:DeleteSnapshot",
+                "ec2:DescribeSnapshots",
+                "ec2:DescribeImages",
+                "ec2:RegisterImage",
+                "ec2:CreateTags",
+                "ec2:ModifyImageAttribute"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "PackerRole"
+          }
+        ]
+      }
+    },
+    "DeploymentRolePolicies": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "deployment",
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "autoscaling:CreateAutoScalingGroup",
+                "autoscaling:CreateLaunchConfiguration",
+                "autoscaling:DeleteLaunchConfiguration",
+                "autoscaling:DescribeAutoScalingGroup",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeLaunchConfigurations",
+                "autoscaling:UpdateAutoScalingGroup",
+                "autoscaling:DescribeScalingActivities",
+                "autoscaling:DeleteAutoScalingGroup",
+                "autoscaling:DescribeScheduledActions",
+                "autoscaling:TerminateInstanceInAutoScalingGroup",
+                "autoscaling:SetDesiredCapacity",
+                "cloudformation:*",
+                "ec2:createTags",
+                "ec2:CreateSecurityGroup",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeInstances",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeAccountAttributes",
+                "ec2:AuthorizeSecurityGroupIngress",
+                "ec2:DeleteSecurityGroup",
+                "elasticache:CreateCacheSubnetGroup",
+                "elasticache:DeleteCacheSubnetGroup",
+                "elasticache:DescribeCacheSubnetGroups",
+                "elasticache:CreateCacheCluster",
+                "elasticache:DescribeCacheClusters",
+                "elasticache:DeleteCacheCluster",
+                "elasticloadbalancing:ConfigureHealthCheck",
+                "elasticloadbalancing:CreateLoadBalancer",
+                "elasticloadbalancing:DeleteLoadBalancer",
+                "elasticloadbalancing:DescribeLoadBalancers",
+                "elasticloadbalancing:ModifyLoadBalancerAttributes",
+                "elasticloadbalancing:SetLoadBalancerPoliciesOfListener",
+                "rds:CreateDBInstance",
+                "rds:CreateDBSubnetGroup",
+                "rds:DeleteDBSubnetGroup",
+                "rds:DescribeDBSubnetGroups",
+                "rds:DeleteDBInstance",
+                "rds:DescribeDBInstances",
+                "route53:CreateHostedZone",
+                "route53:GetChange",
+                "route53:DeleteHostedZone",
+                "route53:ListHostedZones"
+              ],
+              "Resource": "*"
+            }
+          ]
+        },
+        "Roles": [
+          {
+            "Ref": "PackerRole"
+          }
+        ]
+      }
+    }
+  }
+}
