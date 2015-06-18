@@ -297,7 +297,7 @@
               "Principal": {
                 "AWS": {
                   "Fn::GetAtt": [
-                    "packer",
+                    "PackerRole",
                     "Arn"
                   ]
                 }
