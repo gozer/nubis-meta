@@ -10,9 +10,18 @@
       "Description": "Top-level containing domain",
       "Type": "String",
       "Default": "allizom.org"
+    },
+    "DefaultServerCertificate": {
+      "Description": "Default SSL Certificate",
+      "Type": "String"
     }
   },
   "Outputs": {
+    "DefaultServerCertificate": {
+      "Value": {
+        "Ref": "DefaultServerCertificate"
+      }
+    },
     "InstanceProfileName": {
       "Description": "The Name of the instance profile",
       "Value": {
@@ -78,21 +87,21 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubis-amis"
+        "BucketName": "nubisproject-amis"
       }
     },
     "CIS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubis-ci"
+        "BucketName": "nubisproject-ci"
       }
     },
     "FluentdS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "nubis-fluentd"
+        "BucketName": "nubisproject-fluentd"
       }
     },
     "ConsulZone": {

@@ -13,5 +13,6 @@
       template_parameters:
         Environment: "{{ env }}"
         Domain: "{{ domain }}"
+        DefaultServerCertificate: "{{ ssl_cert_arn }}"
     register: stack 
   - debug: var=stack.stack_outputs
