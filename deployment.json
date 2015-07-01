@@ -10,12 +10,21 @@
       "Description": "Top-level containing domain",
       "Type": "String",
       "Default": "allizom.org"
+    },
+    "DefaultServerCertificate": {
+      "Description": "Default SSL Certificate",
+      "Type": "String"
     }
   },
   "Outputs": {
     "ConsulZoneID": {
       "Value": {
         "Ref": "ConsulZone"
+      }
+    },
+    "DefaultServerCertificate": {
+      "Value": {
+        "Ref": "DefaultServerCertificate"
       }
     },
     "NubisMySQL56ParameterGroup": {
