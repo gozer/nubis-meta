@@ -87,21 +87,21 @@
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubisproject-amis"
+        "BucketName": "nubis-amis"
       }
     },
     "CIS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "PublicRead",
-        "BucketName": "nubisproject-ci"
+        "BucketName": "nubis-ci"
       }
     },
     "FluentdS3Bucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "AccessControl": "Private",
-        "BucketName": "nubisproject-fluentd"
+        "BucketName": "nubis-fluentd"
       }
     },
     "ConsulZone": {
