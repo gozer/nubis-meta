@@ -265,6 +265,29 @@
         }
       }
     },
+    "JumpHostZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for JumpHost Project"
+        },
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "jumphost",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
+      }
+    },
     "packerbucketpolicy": {
       "Type": "AWS::S3::BucketPolicy",
       "Properties": {
