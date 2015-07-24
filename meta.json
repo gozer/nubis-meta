@@ -41,6 +41,21 @@
         ]
       }
     },
+    "datadogAccessKey": {
+      "Description": "Access key for this user",
+      "Value": {
+        "Ref": "datadogUserAccessKey"
+      }
+    },
+    "datadogSecretKey": {
+      "Description": "Secret key for this user",
+      "Value": {
+        "Fn::GetAtt": [
+          "datadogUserAccessKey",
+          "SecretAccessKey"
+        ]
+      }
+    },
     "WikiZoneID": {
       "Value": {
         "Ref": "WikiZone"
@@ -627,6 +642,61 @@
             "Ref": "FluentdRole"
           }
         ]
+      }
+    },
+    "datadog": {
+      "Type": "AWS::IAM::User",
+      "Properties": {
+        "Path": "/",
+        "Policies": [
+          {
+            "PolicyName": "datadogReadOnly",
+            "PolicyDocument": {
+              "Version": "2012-10-17",
+              "Statement": [
+                {
+                  "Action": [
+                    "autoscaling:Describe*",
+                    "cloudtrail:DescribeTrails",
+                    "cloudtrail:GetTrailStatus",
+                    "cloudwatch:Describe*",
+                    "cloudwatch:Get*",
+                    "cloudwatch:List*",
+                    "ec2:Describe*",
+                    "ec2:Get*",
+                    "elasticache:Describe*",
+                    "elasticache:List*",
+                    "elasticloadbalancing:Describe*",
+                    "iam:Get*",
+                    "iam:List*",
+                    "kinesis:Get*",
+                    "kinesis:List*",
+                    "kinesis:Describe*",
+                    "rds:Describe*",
+                    "rds:List*",
+                    "ses:Get*",
+                    "ses:List*",
+                    "sns:List*",
+                    "sns:Publish",
+                    "sqs:GetQueueAttributes",
+                    "sqs:ListQueues",
+                    "sqs:ReceiveMessage"
+                  ],
+                  "Effect": "Allow",
+                  "Resource": "*"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "datadogUserAccessKey": {
+      "Type": "AWS::IAM::AccessKey",
+      "Properties": {
+        "UserName": {
+          "Ref": "datadog"
+        }
       }
     },
     "NubisMySQL56ParameterGroup": {
