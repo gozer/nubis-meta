@@ -288,6 +288,29 @@
         }
       }
     },
+    "BedrockZone": {
+      "Type": "AWS::Route53::HostedZone",
+      "Properties": {
+        "HostedZoneConfig": {
+          "Comment": "Zone for Bedrock Project"
+        },
+        "Name": {
+          "Fn::Join": [
+            ".",
+            [
+              "bedrock",
+              {
+                "Ref": "Environment"
+              },
+              "nubis",
+              {
+                "Ref": "Domain"
+              }
+            ]
+          ]
+        }
+      }
+    },
     "packerbucketpolicy": {
       "Type": "AWS::S3::BucketPolicy",
       "Properties": {
