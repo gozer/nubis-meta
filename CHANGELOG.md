@@ -1,5 +1,29 @@
 # Change Log
 
+## [v1.0.0](https://github.com/nubisproject/nubis-meta/tree/v1.0.0) (2015-08-30)
+
+[Full Changelog](https://github.com/nubisproject/nubis-meta/compare/v0.9.0...v1.0.0)
+
+**Implemented enhancements:**
+
+- Add a read-only IAM User with credentials for DataDog [\#1](https://github.com/Nubisproject/nubis-meta/issues/1)
+
+**Closed issues:**
+
+- Simplify for the one-app-per-account layout [\#25](https://github.com/Nubisproject/nubis-meta/issues/25)
+
+- Readme formatting fixes [\#12](https://github.com/Nubisproject/nubis-meta/issues/12)
+
+**Merged pull requests:**
+
+- Meta can be simplified a great deal once we have only one app per account. [\#26](https://github.com/Nubisproject/nubis-meta/pull/26) ([gozer](https://github.com/gozer))
+
+- add zone for bedrock [\#16](https://github.com/Nubisproject/nubis-meta/pull/16) ([gozer](https://github.com/gozer))
+
+- Create datadog readonly user [\#14](https://github.com/Nubisproject/nubis-meta/pull/14) ([limed](https://github.com/limed))
+
+- Formatting fixes for README.md [\#13](https://github.com/Nubisproject/nubis-meta/pull/13) ([limed](https://github.com/limed))
+
 ## [v0.9.0](https://github.com/nubisproject/nubis-meta/tree/v0.9.0) (2015-07-22)
 
 **Closed issues:**
@@ -7,6 +31,8 @@
 - Packer role permission missing [\#3](https://github.com/Nubisproject/nubis-meta/issues/3)
 
 **Merged pull requests:**
+
+- Updating changelog for v0.9.0 release [\#11](https://github.com/Nubisproject/nubis-meta/pull/11) ([gozer](https://github.com/gozer))
 
 - rename buckets [\#10](https://github.com/Nubisproject/nubis-meta/pull/10) ([gozer](https://github.com/gozer))
 
